@@ -15,7 +15,9 @@ C = "a"|"b"|"cd";
 D = ("xyz")*;
 
 // This assigns the variable E to an NFA that accepts either "j" or KleeneStar of "x"
-E = j|("x")*;
+E = "j"|("x")*;
+
+G = (a-z)
 
 // This assigns F to an NFA that accepts A concatenated with B ("abc")
 F = A ^ B;
@@ -23,10 +25,14 @@ F = A ^ B;
 // NOTE: the only distinction between NFA variables and strings is the useage of " "
 
 // Printing to stdout follows this syntax
-PRINT: This is a print/debug statement;
+// NOTE: Currently, only supports one string. Use camel case
+// TODO: Create functionality for string below (with spaces)
+// PRINT: "This is a print or debug 0 statement";
+PRINT: This is a comment;
 
 // Running an NFA with an input looks like this. This will output a value on accepting or not.
-RUN: F << "abc";
+// See if "abc" is accepted by F.
+TEST: F << abc;
 
 // List of operators
 // Concatenation (^): "ab" is "a" concatenated with "b". Can concatenate 2 NFAs

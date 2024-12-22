@@ -1,4 +1,3 @@
-
 #include "../include/nfa.h"
 
 /* Declaring extern locally */

@@ -158,26 +158,8 @@ Node *initNFA() {
         LiteralNFA("\"", "String")
       )
     )
-  ); // String
-  // nfas.push_back(
-  //   ConcatNFA(
-  //     LiteralNFA("\"", "Id"),
-  //     ConcatNFA(
-  //       KleeneStarNFA(
-  //         ConcatNFA(
-  //           KleeneStarNFA(
-  //             LiteralNFA({' '}, "Id")
-  //           ),
-  //           KleeneStarNFA(
-  //             BracketNFA(alphanumeric, "Id")
-  //           )
-  //         )
-  //       ),
-  //       LiteralNFA("\"", "Id")
-  //     ) // Concat2
-  //   ) // /ConcatNFA
-  // );
-
+  ); 
+  
   // Construct literals with their identifiers (Including whitespaces)
   makeLiteralNFAs(nfas);
 

@@ -30,4 +30,4 @@ $(TARGET): $(OBJECTS) | $(BIN_DIR)
 # Clean
 .PHONY: clean
 clean:
-	rm -rf $(BIN_DIR)/*.o $(TARGET)
+	rm -rf $(BIN_DIR)/* $(TARGET)

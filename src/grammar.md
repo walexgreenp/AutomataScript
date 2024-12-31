@@ -17,8 +17,6 @@ exp_p1       ::= `(` exp `)`
                | `(` id[0] `-` id[0] `)`
 exp_ac       ::= `"` id `"`
 
-
-
 # Operands (highest to lowest precedence)
 binop_p2 ::= `|` | `^` | 
 binop_p1 ::- `*` | `+` | `?`

@@ -49,9 +49,21 @@ struct AssignData{
   Exp* rhs;
 };
 
+struct ErrorData{
+  enum class Type {ParsingError} error_type;
+  int error_index; // Only set if Type == parsing_error
+  
+  // Constructors
+  ErrorData(Type type, int index) : error_type(type), error_index(index) {};
+};
+
+
 struct Instruction{
-  enum class Type {Print, Test, Assign} inst_type;
+  enum class Type {Print, Test, Assign, Error} inst_type;
   void* data;
+
+  // Constructors
+  Instruction(Type type, void* ptr) : inst_type(type), data(ptr) {};
 };
 
 #endif /* TRANSPILER_TYPES_H */

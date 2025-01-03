@@ -5,6 +5,9 @@
 #include <string>
 #include <vector>
 
+/* Macro Definitions */
+#define NO_ERR -1
+
 /* Forward declarations of types */
 struct Exp;
 struct Exp_p2;
@@ -37,6 +40,8 @@ struct Exp_p1{
 
 struct PrintData{
   std::string output_string;
+
+  PrintData(std::string str) : output_string(str) {};
 };
 
 struct TestData{

@@ -56,14 +56,16 @@ std::vector<std::string> mainTokenizer(std::string input) {
 
   // Start position for the RunNFA
   int startIndex = 0;
-  // fileLength = input.length();
   while (startIndex < input.length()) {
     int tokenLength = RunNFA(startNode, startIndex, input);
 
     if (tokenLength > 0) {
       std::string token = input.substr(startIndex, tokenLength);
       std::string out = outputToken(token);
-      tokens.push_back(out);
+      if(out != "IGNORE"){
+        // Don't add IGNORE tokens
+        tokens.push_back(out);
+      }
       startIndex += tokenLength; // Move the start index forward by the length
                                  // of the token
     } else {

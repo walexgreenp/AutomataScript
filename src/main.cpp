@@ -3,6 +3,7 @@
 #include <vector>
 #include "../include/tokenize.h"
 #include "../include/parse.h"
+#include "../include/codegen.h"
 #include "../include/transpiler_types.h"
 
 int main(int argc, char *argv[]) {
@@ -30,10 +31,13 @@ int main(int argc, char *argv[]) {
   }
 
   // Take the tokens, turn into AST.
-  std::vector<Instruction> all_instructions = mainParser(tokens);
+  Parser parser(tokens);
+  std::vector<Instruction> all_instructions = parser.mainParser();
   if(all_instructions[0].inst_type == Instruction::Type::Error){
     std::cout << "Parsing error at index " << ((ErrorData*)all_instructions[0].data)->error_index << std::endl;
   }
+
+  generate_code("bin/tmp/cppcode.cpp");
 
 
 

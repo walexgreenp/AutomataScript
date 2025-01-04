@@ -32,4 +32,5 @@ $(TARGET): $(OBJECTS) | $(BIN_DIR)
 clean:
 	rm -rf $(BIN_DIR)/*.o $(TARGET)
 	rm -rf $(BIN_DIR)/transpile $(TARGET)
+	rm -rf $(BIN_DIR)/compiled_output $(TARGET)
 	rm -rf $(BIN_DIR)/tmp/* $(TARGET)

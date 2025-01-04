@@ -37,8 +37,20 @@ int main(int argc, char *argv[]) {
     std::cout << "Parsing error at index " << ((ErrorData*)all_instructions[0].data)->error_index << std::endl;
   }
 
-  generate_code("bin/tmp/cppcode.cpp");
+  // Generate the C++ code, store it in file location
+  CodeGenerator codegen("bin/tmp/cppcode.cpp", all_instructions);
+  codegen.generateCode();
 
+  // Compile & run generated code
+  std::string cppDirectory = "bin/tmp/";
+  std::string binaryName = "./bin/compiled_output";
+  // TODO: Add ways to use different compilers with setting flags
+  std::string compileCommand = "g++ " + cppDirectory + "/cppcode.cpp -o " + binaryName;
+  if (std::system(compileCommand.c_str()) != 0) {
+    std::cerr << "Compilation failed!\n";
+    return 2;
+  }
+  std::system(binaryName.c_str());
 
-
+  return 0;
 }

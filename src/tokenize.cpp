@@ -45,9 +45,7 @@ std::string removeComments(std::string input) {
 
 std::vector<std::string> mainTokenizer(std::string input) {
   std::vector<std::string> tokens;
-  int counter = 0; // Counter for unmatched "/*"
 
-  size_t pos = 0; // Position in the string
   input = removeComments(input);
   input += "\n";
 
@@ -116,12 +114,10 @@ std::string outputToken(const std::string &lexeme) {
     }
   }
 
-  std::cout << outputToken << std::endl;
   return outputToken;
 }
 
 Node *initNFA() {
-  Node *new_node = new Node();
   std::vector<std::pair<Node *, Node *>> nfas;
   std::vector<char> alphabet;
   for (char letter = 'a'; letter <= 'z'; letter++) {
@@ -142,7 +138,6 @@ Node *initNFA() {
   std::vector<char> literals = {'&', ':', ';', ',', '_', '-', '+', '-',
                            '*', '/', '<', '<', '>', '>', '.', '=',
                            '(', ')', '[', ']', '{', '}', '!', '^'};
-  std::pair<Node *, Node *> current_nfa;
   nfas.push_back(PlusNFA(numbers, "Num")); // Num
 
   nfas.push_back(

@@ -37,6 +37,10 @@ int main(int argc, char *argv[]) {
     std::cout << "Parsing error at index " << ((ErrorData*)all_instructions[0].data)->error_index << std::endl;
   }
 
+  // TODO: Validation phase
+  // If parsing is successful, there may be places that are invalid, e.g. attempting to access an unused variable, etc.
+
+
   // Generate the C++ code, store it in file location
   CodeGenerator codegen("bin/tmp/cppcode.cpp", all_instructions);
   codegen.generateCode();

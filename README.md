@@ -15,7 +15,7 @@ AutomataScript is a custom programming language designed for defining and manipu
 To build the project, ensure you have a C++ compiler (e.g., `g++`) installed. Then, clone the repository and compile the transpiler:
 
 ```sh
-git clone <repository-url>
+git clone https://github.com/walexgreenp/AutomataScript
 cd AutomataScript
 make
 ```

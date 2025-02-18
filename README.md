@@ -46,6 +46,7 @@ This command:
 ### 🔧 In Progress / TODO
 - [ ] Build parser and AST generator for variable creation
 - [ ] Build parser and AST generator for Automata Run steps
+- [ ] Complete validation phase of parser
 - [ ] Add optimization for generated C++ code
 - [ ] Improve error reporting with detailed messages
 - [ ] Extend language features (e.g., loops, conditionals)

@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 #include "../include/transpiler_types.h"
-#include "../include/debug.h"
+#include "../include/logger.h"
 
 class Parser{
 public:

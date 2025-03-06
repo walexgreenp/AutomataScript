@@ -6,6 +6,8 @@
 #include "../include/codegen.h"
 #include "../include/validate.h"
 #include "../include/transpiler_types.h"
+#include "../include/logger.h"
+
 
 int main(int argc, char *argv[]) {
   if (argc != 2) {
@@ -30,7 +32,7 @@ int main(int argc, char *argv[]) {
     std::cout << tokens[0] << std::endl;
     return 1;
   }
-  log_tokens(tokens);
+  logger.log_tokens(tokens);
 
   // Take the tokens, turn into AST.
   Parser parser(tokens);

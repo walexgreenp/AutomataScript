@@ -1,5 +1,9 @@
 #include "../include/debug.h"
 
+/*
+* Log tokens with their index/identifier
+* Outputted at logs/token_log.log
+*/
 void log_tokens(std::vector<std::string> tokens){
   std::ofstream outputFile;
   outputFile.open("logs/token_log.log");

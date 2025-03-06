@@ -28,8 +28,6 @@ private:
   int consumeToken();
   std::vector<Instruction> generateErrorIV(int err_val);
   Instruction generateErrorInstruction(int err_val);
-
-
 };
 
 #endif /* PARSE_H */

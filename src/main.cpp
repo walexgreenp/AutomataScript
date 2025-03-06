@@ -4,6 +4,7 @@
 #include "../include/tokenize.h"
 #include "../include/parse.h"
 #include "../include/codegen.h"
+#include "../include/validate.h"
 #include "../include/transpiler_types.h"
 
 int main(int argc, char *argv[]) {
@@ -36,10 +37,17 @@ int main(int argc, char *argv[]) {
   std::vector<Instruction> all_instructions = parser.mainParser();
   if(all_instructions[0].inst_type == Instruction::Type::Error){
     std::cout << "Parsing error at index " << ((ErrorData*)all_instructions[0].data)->error_index << std::endl;
+    return 1;
   }
 
-  // TODO: Validation phase
+  // Validation phase
   // If parsing is successful, there may be places that are invalid, e.g. attempting to access an unused variable, etc.
+  Validator validator(all_instructions);
+  int validate_status = validator.validate();
+  if(validate_status == -1){
+    std::cout << "Validation error" << std::endl;
+    return 1;
+  }
 
 
   // Generate the C++ code, store it in file location

@@ -1,6 +1,6 @@
 # AutomataScript
 
-AutomataScript is a custom programming language designed for defining and manipulating finite automata and regular expressions. It transpiles into C++ code, allowing seamless execution of automata-based logic.
+AutomataScript is a custom programming language designed for defining and manipulating finite automata and regular expressions. It transpiles into C++ code, allowing seamless execution of automata-based logic. Look at examples/ directory to find sample code that is available. README.md in examples has notes on what is valid/invalid
 
 ## Features
 - **Custom LL(1) Grammar** – Designed and implemented a formal grammar for parsing AutomataScript.
@@ -51,6 +51,10 @@ This command:
 - [ ] Improve error reporting with detailed messages
 - [ ] Extend language features (e.g., loops, conditionals)
 - [ ] Write comprehensive documentation and examples
+
+### Current/next task
+- [ ] Set up validation structures
+- [ ] Basic validation of TEST calls (Calling test on non-existent NFA)
 
 ## Contributing
 Contributions are welcome! To contribute:

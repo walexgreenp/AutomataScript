@@ -32,7 +32,7 @@ PRINT: This is a comment;
 
 // Running an NFA with an input looks like this. This will output a value on accepting or not.
 // See if "abc" is accepted by F.
-TEST: F << abc;
+TEST: F << "abc";
 
 // List of operators
 // Concatenation (^): "ab" is "a" concatenated with "b". Can concatenate 2 NFAs

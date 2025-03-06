@@ -47,6 +47,8 @@ struct PrintData{
 struct TestData{
   std::string NFA_name;
   std::string test_value;
+
+  TestData(std::string name, std::string value) : NFA_name(name), test_value(value) {};
 };
 
 struct AssignData{

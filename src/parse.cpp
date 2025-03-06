@@ -53,6 +53,8 @@ std::vector<Instruction> Parser::mainParser(){
         return generateErrorIV(err_val);
       }
 
+      Instruction testInst = parseTest();
+      instructions.push_back(testInst);
     }
 
     // Handle Variable
@@ -61,7 +63,6 @@ std::vector<Instruction> Parser::mainParser(){
       if(err_val != NO_ERR){
         return generateErrorIV(err_val);
       }
-
     }
 
     // Invalid, return.
@@ -170,10 +171,94 @@ Instruction Parser::generateErrorInstruction(int err_val){
 }
 
 
+/*
+ * Function: parseTest()
+ *
+ * Parse the print and store into Instruction
+ *
+ * print ::= `PRINT` `:`  Id()* `;`
+ *
+ */
+Instruction Parser::parseTest(){
+  std::string currToken;
 
+  // Parsing `:`
+  currToken = tokens[parsing_index];
+  if(currToken != "Colon"){
+    return generateErrorInstruction(parsing_index);
+  }
+  int err_val = consumeToken();
+  if(err_val != NO_ERR){
+    return generateErrorInstruction(err_val);
+  }
 
+  // Parsing lval
+  std::string nfa_name = "";
+  currToken = tokens[parsing_index];
+  if(currToken.substr(0,3) != "Id("){
+    return generateErrorInstruction(parsing_index);
+  }
+  nfa_name += currToken.substr(3, currToken.length()-4);
+  err_val = consumeToken();
+  if(err_val != NO_ERR){
+    return generateErrorInstruction(err_val);
+  }
+  
+  // Parsing "<<"
+  currToken = tokens[parsing_index];
+  if(currToken != "Runner"){
+    return generateErrorInstruction(parsing_index);
+  }
+  err_val = consumeToken(); // Consume "<<"
+  if(err_val != NO_ERR){
+    return generateErrorInstruction(err_val);
+  }
+  
+  // Parsing "
+  currToken = tokens[parsing_index];
+  if(currToken != "Quotation"){
+    return generateErrorInstruction(parsing_index);
+  }
+  err_val = consumeToken(); // Consume "
+  if(err_val != NO_ERR){
+    return generateErrorInstruction(err_val);
+  }
+  
+  // Parsing Id()
+  std::string test_value = "";
+  currToken = tokens[parsing_index];
+  if(currToken.substr(0,3) != "Id("){
+    return generateErrorInstruction(parsing_index);
+  }
+  nfa_name += currToken.substr(3, currToken.length()-4);
+  err_val = consumeToken();
+  if(err_val != NO_ERR){
+    return generateErrorInstruction(err_val);
+  }
 
+  // Parsing "
+  currToken = tokens[parsing_index];
+  if(currToken != "Quotation"){
+    return generateErrorInstruction(parsing_index);
+  }
+  err_val = consumeToken(); // Consume "
+  if(err_val != NO_ERR){
+    return generateErrorInstruction(err_val);
+  }
 
+  // Parsing `;`
+  currToken = tokens[parsing_index];
+  if(currToken != "Semicolon"){
+    return generateErrorInstruction(parsing_index);
+  }
+  err_val = consumeToken(); // Consume semicolon
+  if(err_val != NO_ERR){
+    return generateErrorInstruction(err_val);
+  }
 
+  // Setting data for the instruction for vector
+  TestData* test_data = new TestData(nfa_name, test_value);
+  Instruction inst_out(Instruction::Type::Test, test_data);
 
-
+  return inst_out;
+}

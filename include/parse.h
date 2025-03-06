@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include "../include/transpiler_types.h"
+#include "../include/debug.h"
 
 class Parser{
 public:
@@ -21,6 +22,7 @@ private:
 
   // Parsing functions
   Instruction parsePrint();
+  Instruction parseTest();
 
   // Helper functions
   int consumeToken();

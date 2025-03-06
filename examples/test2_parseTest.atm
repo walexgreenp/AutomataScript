@@ -1,0 +1,3 @@
+PRINT: Basic test call;
+PRINT: No NFA created so should throw error at validation;
+TEST: F << "abc";

@@ -29,6 +29,7 @@ int main(int argc, char *argv[]) {
     std::cout << tokens[0] << std::endl;
     return 1;
   }
+  log_tokens(tokens);
 
   // Take the tokens, turn into AST.
   Parser parser(tokens);

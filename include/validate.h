@@ -6,6 +6,7 @@
 #include <string>
 #include <unordered_set>
 #include "../include/transpiler_types.h"
+#include "../include/logger.h"
 
 class Validator{
 public:

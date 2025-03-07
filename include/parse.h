@@ -23,6 +23,12 @@ private:
   // Parsing functions
   Instruction parsePrint();
   Instruction parseTest();
+  Instruction parseVar();
+
+  // Expression parsing functions
+  Exp* parseRhs();
+  Exp_p2* parseExp_p2();
+  Exp_p1* parseExp_p1();
 
   // Helper functions
   int consumeToken();

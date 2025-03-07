@@ -74,7 +74,7 @@ void CodeGenerator::generateCode(){
 *
 */
 void CodeGenerator::generateTestCode(){
-  std::cout << "Generating Test Code " << std::endl;
+  // std::cout << "Generating Test Code " << std::endl;
 
   return;
 }
@@ -102,7 +102,6 @@ void CodeGenerator::generatePrintCode(PrintData* printData){
 *
 */
 void CodeGenerator::generateAssignCode(){
-  std::cout << "Generating Assign Code " << std::endl;
-
+  // std::cout << "Generating Assign Code " << std::endl;
   return;
 }

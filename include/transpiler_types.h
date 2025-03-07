@@ -22,20 +22,32 @@ struct Instruction;
 struct Exp{
   Exp_p2* exp_p2;
   std::vector<std::pair<std::string, Exp_p2*>> binop_exp_p2s;
+
+  Exp() : exp_p2(nullptr) {};
+  Exp(Exp_p2* p2_exp) : exp_p2(p2_exp) {};
 };
 
 struct Exp_p2{
   Exp_p1* exp_p1;
   std::string binop_p1; // OPTIONAL
+  
+  Exp_p2(Exp_p1* p1_exp) : exp_p1(p1_exp) {};
+  Exp_p2(Exp_p1* p1_exp, std::string p1_binop) : exp_p1(p1_exp), binop_p1(p1_binop) {};
 };
 
 struct Exp_p1{
+  // Exp: New expression
+  // Exp_ac: Literal (string)
+  // Lval: NFA (pre-existing)
+  enum class Type {Exp, Exp_ac, Lval} exp_p1_type;
+
   // `(` exp `)`
   Exp* exp; 
-
   // exp_ac*
   // (a-z)
   std::string identifier;
+
+  Exp_p1() : exp(nullptr) {};
 };
 
 struct PrintData{
@@ -54,6 +66,8 @@ struct TestData{
 struct AssignData{
   std::string lhs;
   Exp* rhs;
+
+  AssignData(std::string left, Exp* right) : lhs(left), rhs(right) {};
 };
 
 struct ErrorData{

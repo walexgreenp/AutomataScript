@@ -14,7 +14,8 @@ test   ::= `TEST` `:` lval `<<` `"` id `"` `;`
 exp_p2       ::= exp_p1 binop_p1?
 exp_p1       ::= `(` exp `)`
                | exp_ac
-               | `(` id[0] `-` id[0] `)`
+               | `(` exp_ac `-` exp_ac `)`
+               | lval
 exp_ac       ::= `"` id `"`
 
 # Operands (highest to lowest precedence)

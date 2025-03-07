@@ -42,19 +42,22 @@ This command:
 - [x] Implement basic C++ transpilation
 - [x] Automate compilation and execution
 - [x] Basic error handling
+- [x] Set up validation structures
+- [x] Build parser and AST generator for Automata Run steps
+- [x] Basic validation of TEST calls (Calling test on non-existent NFA)
+- [x] Build parser/AST gen for basic variables
+- [x] Build validator for basic variables
 
-### 🔧 In Progress / TODO
-- [ ] Build parser and AST generator for variable creation
-- [ ] Build parser and AST generator for Automata Run steps
-- [ ] Complete validation phase of parser
+### 💻 In Progress
+- [ ] Build code generator for basic variables
+
+### 📋 TODO
+- [ ] Parser, AST, Validate, Codegen for complex variables
 - [ ] Add optimization for generated C++ code
 - [ ] Improve error reporting with detailed messages
 - [ ] Extend language features (e.g., loops, conditionals)
 - [ ] Write comprehensive documentation and examples
 
-### Current/next task
-- [ ] Set up validation structures
-- [ ] Basic validation of TEST calls (Calling test on non-existent NFA)
 
 ## Contributing
 Contributions are welcome! To contribute:

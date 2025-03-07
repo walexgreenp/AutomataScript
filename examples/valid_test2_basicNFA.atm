@@ -1,0 +1,4 @@
+PRINT: Basic test call;
+PRINT: Should properly create NFA and output valid for the test call;
+F = "abc";
+TEST: F << "abc";

@@ -6,7 +6,10 @@
 #include <string>
 #include <fstream>
 #include "../include/transpiler_types.h"
+#include "../include/logger.h"
 
+// Macro defn. for simpler syntax
+#define GEN(line, out) (out) << (line) << std::endl;
 
 class CodeGenerator{
 public: 
@@ -21,12 +24,18 @@ private:
   // Private member variables
   const std::vector<Instruction> instructionList;
   std::string fileLocation;
-  std::ofstream outputFile;
+
+  std::ofstream mainOutput;
+  std::ofstream makeFile;
+  std::ofstream complexCode;
 
   // Private class functions
   void generateTestCode();
   void generatePrintCode(PrintData* printData);
-  void generateAssignCode();
+  void generateAssignCode(AssignData* assignData);
+
+  void generateMakefile();
+  void generateImplicitCode();
 
 };
 

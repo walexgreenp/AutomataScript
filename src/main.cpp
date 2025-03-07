@@ -53,14 +53,13 @@ int main(int argc, char *argv[]) {
 
 
   // Generate the C++ code, store it in file location
-  CodeGenerator codegen("bin/tmp/cppcode.cpp", all_instructions);
+  CodeGenerator codegen("bin/tmp/", all_instructions);
   codegen.generateCode();
 
   // Compile & run generated code
   std::string cppDirectory = "bin/tmp/";
   std::string binaryName = "./bin/compiled_output";
-  // TODO: Add ways to use different compilers with setting flags
-  std::string compileCommand = "g++ " + cppDirectory + "/cppcode.cpp -o " + binaryName;
+  std::string compileCommand = "make -C bin/tmp/";
   if (std::system(compileCommand.c_str()) != 0) {
     std::cerr << "Compilation failed!\n";
     return 2;

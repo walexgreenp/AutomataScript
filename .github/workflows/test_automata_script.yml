@@ -23,6 +23,6 @@ jobs:
         run: |
           for test_file in tests/*.as; do
             echo "Running $test_file..."
-            ./runAutomataScript "$test_file" > output.txt
+            ./bin/transpile "$test_file" > output.txt
             diff output.txt "tests/expected/$(basename $test_file .as).txt"
           done

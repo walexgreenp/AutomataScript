@@ -22,9 +22,6 @@ jobs:
       - name: Fix permissions
         run: chmod -R 777 bin/
 
-      - name: Create dummy logfile to prevent errors
-        run: mkdir -p bin/tmp && touch bin/tmp/cppcode.cpp
-
       - name: Build Transpiler
         run: make
 

@@ -9,9 +9,11 @@ Logger logger("logs/logfile.log");
 Logger::Logger(const std::string &filename) {
   logFile.open(filename);
 
+  #ifndef GITHUB_ACTIONS
   if (!logFile.is_open()) {
     std::cerr << "Error opening log file!\n";
   }
+  #endif /* GITHUB_ACTIONS */
 }
 
 Logger::~Logger() {

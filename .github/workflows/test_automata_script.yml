@@ -1,0 +1,28 @@
+name: AutomatScript CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: sudo apt-get update && sudo apt-get install -y g++
+
+      - name: Build Transpiler
+        run: make
+
+      - name: Run Tests
+        run: |
+          for test_file in tests/*.as; do
+            echo "Running $test_file..."
+            ./runAutomataScript "$test_file" > output.txt
+            diff output.txt "tests/expected/$(basename $test_file .as).txt"
+          done

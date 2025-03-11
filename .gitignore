@@ -33,3 +33,7 @@
 
 # Logs
 *.log
+
+# Binaries
+bin/*
+!bin/.gitkeep

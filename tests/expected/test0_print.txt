@@ -1,0 +1,7 @@
+------------------
+* AutomataScript *
+
+- Testing print 
+- This should exit properly 
+- 
+------------------

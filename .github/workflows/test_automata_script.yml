@@ -27,11 +27,11 @@ jobs:
 
       - name: Run Tests
         run: |
-          for test_file in tests/*.as; do
+          for test_file in tests/*.atm; do
             echo "Running $test_file..."
             ./bin/transpile "$test_file" > output.txt
             # Remove make output before diffing
-            grep -v "make: " output.txt | diff - "tests/expected/$(basename "$test_file" .as).txt" || {
+            grep -v "make: " output.txt | diff - "tests/expected/$(basename "$test_file" .atm).txt" || {
               echo "Test failed for $test_file"
               exit 1
             }

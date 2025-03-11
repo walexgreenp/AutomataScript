@@ -1,0 +1,6 @@
+------------------
+* AutomataScript *
+
+- Basic test call 
+- Should properly create NFA and output valid for the test call 
+------------------

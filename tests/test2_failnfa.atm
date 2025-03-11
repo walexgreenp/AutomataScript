@@ -1,0 +1,11 @@
+PRINT: Basic test call;
+PRINT: Create vaild AND invalid test;
+PRINT: Should compile properly but should output some sort of fail on the users end;
+
+// Passing test
+Pass = "passing";
+TEST: Pass << "passing";
+
+// Failing test ("failing" not  "fail")
+Fail = "failing";
+TEST: Fail << "fail";

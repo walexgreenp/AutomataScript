@@ -22,14 +22,14 @@ make
 
 ## Usage
 
-To run an AutomataScript file (`.as`):
+To run an AutomataScript file (`.atm`):
 
 ```sh
-./runAutomataScript path/to/script.as
+./runAutomataScript path/to/script.atm
 ```
 
 This command:
-1. Parses and transpiles `script.as` into C++ code.
+1. Parses and transpiles `script.atm` into C++ code.
 2. Compiles the generated C++ code using the system’s compiler.
 3. Executes the compiled program.
 

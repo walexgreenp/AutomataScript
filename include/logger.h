@@ -2,6 +2,7 @@
 #define LOGGER_H
 
 #include "../include/transpiler_types.h"
+#include <cstdlib>
 #include <iostream>
 #include <fstream>
 #include <string>

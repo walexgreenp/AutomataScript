@@ -130,7 +130,7 @@ void CodeGenerator::generatePrintCode(PrintData* printData){
 *
 */
 void CodeGenerator::generateAssignCode(AssignData* assignData){
-  // std::cout << "Generating Assign Code " << std::endl;
+  std::cout << "Generating Assign Code " << std::endl;
   
 
   return;

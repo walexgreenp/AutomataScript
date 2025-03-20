@@ -30,7 +30,7 @@ private:
   std::ofstream complexCode;
 
   // Private class functions
-  void generateTestCode();
+  void generateTestCode(TestData* testData);
   void generatePrintCode(PrintData* printData);
   void generateAssignCode(AssignData* assignData);
   

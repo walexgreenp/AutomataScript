@@ -10,7 +10,7 @@ Logger::Logger(const std::string &filename) {
   logFile.open(filename);
 
     if (std::getenv("GITHUB_ACTIONS") != nullptr) {
-        std::cerr << "Error opening log file!\n";
+        // std::cerr << "Error opening log file!\n";
     }
 }
 

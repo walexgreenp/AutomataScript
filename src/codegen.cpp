@@ -168,7 +168,7 @@ void CodeGenerator::generateMakefile(){
 
   GEN("# Compiler + Flags", makeFile);
   GEN("CXX = g++", makeFile);
-  GEN("CXXFLAGS = -Iinclude -std=c++17 -Wall", makeFile);
+  GEN("CXXFLAGS = -Iinclude -std=c++17 -w", makeFile);
   GEN("", makeFile)
 
   GEN("SRC = $(wildcard *.cpp)", makeFile);

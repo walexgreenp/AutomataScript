@@ -309,7 +309,7 @@ Exp* Parser::parseRhs() {
   Exp_p2* p2_exp = parseExp_p2();
   Exp *expression = new Exp(p2_exp);
 
-  // TODO: Loop to see if there are any further expressions
+  // TODO: Loop to see if there are any further expressions for binop_exp_p2s
 
   currToken = tokens[parsing_index];
   if(currToken != "Semicolon"){

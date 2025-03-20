@@ -130,8 +130,26 @@ void CodeGenerator::generatePrintCode(PrintData* printData){
 *
 */
 void CodeGenerator::generateAssignCode(AssignData* assignData){
-  // std::cout << "Generating Assign Code " << std::endl;
-  
+  std::string instruction = "\t";
+
+  // Grab the desired variable name
+  std::string lhs = assignData->lhs;
+  instruction += "std::pair<Node *, Node*> ";
+  instruction += lhs;
+  instruction += " = ";
+
+  std::string rhs_code = generateRhsCode(assignData->rhs);
+  Exp* rhs = assignData->rhs;
+
+  instruction += rhs_code;
+
+  instruction += ",\"";
+  instruction += lhs;
+  instruction += "\");";
+
+  GEN(instruction, mainOutput);
+
+  // TODO: Check if I should display anything to the user that the variable was created
 
   return;
 }
@@ -149,7 +167,7 @@ void CodeGenerator::generateMakefile(){
 
   GEN("# Compiler + Flags", makeFile);
   GEN("CXX = g++", makeFile);
-  GEN("CXXFLAGS = -Iinclude -std=c++17 -Wall", makeFile);
+  GEN("CXXFLAGS = -Iinclude -std=c++17 -w", makeFile);
   GEN("", makeFile)
 
   GEN("SRC = $(wildcard *.cpp)", makeFile);
@@ -259,4 +277,52 @@ void CodeGenerator::generateImplicitCode(){
       LOG("Line read");
   }
   nfaHSourceFile.close();
+}
+
+
+// WARN: Incomplete
+std::string CodeGenerator::generateRhsCode(Exp* rhs){
+  std::string rhs_out = "";
+
+  Exp_p2* exp_p2 = rhs->exp_p2;
+  std::string exp_p2_code = generateExpP2Code(exp_p2);
+  rhs_out += exp_p2_code;
+
+
+
+  // TODO: CodeGen for binop_exp_p2s
+  
+  return rhs_out;
+}
+
+
+
+// WARN: Incomplete
+std::string CodeGenerator::generateExpP2Code(Exp_p2* exp_p2){
+  std::string instruction = "";
+  Exp_p1* exp_p1 = exp_p2->exp_p1;
+
+  instruction += generateExpP1Code(exp_p1);
+  
+  // TODO: CodeGen for binop_p1
+
+  return instruction;
+}
+
+
+// WARN: Incomplete
+std::string CodeGenerator::generateExpP1Code(Exp_p1* exp_p1){
+  std::string output = "";
+
+  if(exp_p1->exp_p1_type == Exp_p1::Type::Exp_ac){
+    output += "LiteralNFA(\"";
+    output += exp_p1->identifier;
+    output += "\"";
+    return output;
+  }
+
+
+  // TODO: Cases for Exp, Lval
+
+  return "";
 }

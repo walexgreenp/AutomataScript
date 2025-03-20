@@ -33,6 +33,11 @@ private:
   void generateTestCode();
   void generatePrintCode(PrintData* printData);
   void generateAssignCode(AssignData* assignData);
+  
+  // Assign class function
+  std::string generateRhsCode(Exp* rhs);
+  std::string generateExpP2Code(Exp_p2* exp_p2);
+  std::string generateExpP1Code(Exp_p1* exp_p1);
 
   void generateMakefile();
   void generateImplicitCode();

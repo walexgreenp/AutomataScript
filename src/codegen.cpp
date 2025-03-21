@@ -218,8 +218,8 @@ void CodeGenerator::generateAssignCode(AssignData* assignData){
   instruction += lhs;
   instruction += " = ";
 
-  std::string rhs_code = generateRhsCode(assignData->rhs);
   Exp* rhs = assignData->rhs;
+  std::string rhs_code = generateRhsCode(rhs);
 
   instruction += rhs_code;
 

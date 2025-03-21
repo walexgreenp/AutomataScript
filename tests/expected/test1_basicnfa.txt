@@ -3,4 +3,5 @@
 
 - Basic test call 
 - Should properly create NFA and output valid for the test call 
+- F <- abc: Accepted by NFA.
 ------------------

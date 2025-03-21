@@ -160,26 +160,6 @@ void CodeGenerator::generateTestCode(TestData* testData){
   instruction = "\t}";
   GEN(instruction, mainOutput);
 
-
-
-
-
-  /*
-   - [x] startNode = [testData->NFA_name].first;
-   - [x] error_status = RunNFA(startNode, 0, [testData->test_value]);
-   if(error_status == -1){
-    std::cout << "- " + [testData->NFA_name] + " <- " + [testData->test)value] + ": Rejected by NFA.";
-
-   }
-   else{
-    std::cout << "- " + [testData->NFA_name] + " <- " + [testData->test)value] + ": Accepted by NFA.";
-   }
-   */
-
-
-
-
-
   return;
 }
 

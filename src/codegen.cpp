@@ -59,15 +59,25 @@ void CodeGenerator::generateCode(){
   // Generate main file
   GEN("#include <iostream>", mainOutput);
   GEN("#include \"regex.h\"", mainOutput);
+  GEN("", mainOutput);
   GEN("int main(){", mainOutput);
+
+  GEN("\t// Boilerplate.", mainOutput);
   GEN("\tstd::cout << \"------------------\" << std::endl;", mainOutput);
   GEN("\tstd::cout << \"* AutomataScript *\" << std::endl << std::endl;", mainOutput);
 
+  GEN("", mainOutput);
+  GEN("\t// Setting up important variables", mainOutput);
+  GEN("\tNode* startNode;", mainOutput);
+  GEN("\tint error_status;", mainOutput);
+
+  GEN("", mainOutput);
+  GEN("\t// Generating code", mainOutput);
   // Call function for each type of instruction
   for(Instruction instruction : instructionList){
     switch(instruction.inst_type){
       case Instruction::Type::Test:
-        generateTestCode();
+        generateTestCode((TestData*)instruction.data);
         break;
       case Instruction::Type::Print:
         generatePrintCode((PrintData*)instruction.data);
@@ -81,6 +91,8 @@ void CodeGenerator::generateCode(){
     }
   }
 
+  GEN("", mainOutput);
+  GEN("\t// End.", mainOutput);
   GEN("\tstd::cout << \"------------------\" << std::endl;", mainOutput);
   GEN("\treturn 0;", mainOutput);
   GEN("}", mainOutput);
@@ -101,8 +113,52 @@ void CodeGenerator::generateCode(){
 * WARN: Not implemented
 *
 */
-void CodeGenerator::generateTestCode(){
-  // std::cout << "Generating Test Code " << std::endl;
+void CodeGenerator::generateTestCode(TestData* testData){
+  std::string instruction = "";
+  
+  // Get the appropriate node value.
+  instruction += "\tstartNode = ";
+  instruction += testData->NFA_name;
+  instruction += ".first;";
+  GEN(instruction, mainOutput);
+
+  // Run the NFA, store the status
+  instruction = "\terror_status = RunNFA(startNode, 0, \"";
+  instruction += testData->test_value;
+  instruction += "\");";
+  GEN(instruction, mainOutput);
+
+  // If statement
+  instruction = "\tif(error_status == -1){";
+  GEN(instruction, mainOutput);
+
+  // Print NFA rejected
+  instruction = "\t\tstd::cout << \"- ";
+  instruction += testData->NFA_name;
+  instruction += " <- ";
+  instruction += testData->test_value;
+  instruction += ": Rejected by NFA.\" << std::endl;";
+  GEN(instruction, mainOutput);
+
+  // If statement close
+  instruction = "\t}";
+  GEN(instruction, mainOutput);
+  
+  // Else...
+  instruction = "\telse{";
+  GEN(instruction, mainOutput);
+
+  // Print NFA rejected
+  instruction = "\t\tstd::cout << \"- ";
+  instruction += testData->NFA_name;
+  instruction += " <- ";
+  instruction += testData->test_value;
+  instruction += ": Accepted by NFA.\" << std::endl;";
+  GEN(instruction, mainOutput);
+
+  // Else statement close
+  instruction = "\t}";
+  GEN(instruction, mainOutput);
 
   return;
 }
@@ -115,8 +171,12 @@ void CodeGenerator::generateTestCode(){
 *
 */
 void CodeGenerator::generatePrintCode(PrintData* printData){
+  std::string instruction = "";
+  instruction += "\tstd::cout << \"";
+  instruction += printData->output_string;
+  instruction += "\" << std::endl;";
 
-  mainOutput << "  std::cout << \"" << printData->output_string << "\" << std::endl;" << std::endl;
+  GEN(instruction, mainOutput);
 
   return;
 }
@@ -138,8 +198,8 @@ void CodeGenerator::generateAssignCode(AssignData* assignData){
   instruction += lhs;
   instruction += " = ";
 
-  std::string rhs_code = generateRhsCode(assignData->rhs);
   Exp* rhs = assignData->rhs;
+  std::string rhs_code = generateRhsCode(rhs);
 
   instruction += rhs_code;
 

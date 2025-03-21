@@ -4,4 +4,6 @@
 - Basic test call 
 - Create vaild AND invalid test 
 - Should compile properly but should output some sort of fail on the users end 
+- Pass <- passing: Accepted by NFA.
+- Fail <- fail: Rejected by NFA.
 ------------------

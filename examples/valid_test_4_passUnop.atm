@@ -1,4 +1,4 @@
 PRINT: Basic unop call;
 PRINT: KleeneStar allows multiple repeats of the same thing;
 A = "abc";
-TEST: A << "aba";
+TEST: A << "abcabc";

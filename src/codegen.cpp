@@ -306,14 +306,11 @@ void CodeGenerator::generateImplicitCode(){
   if (!nfaCpp.is_open()) {
     throw std::ios_base::failure("Failed to open file: " + fileLocation + "nfa.cpp");
   }
-  std::ifstream nfaCSourceFile("src/nfa.cpp");
+  std::ifstream nfaCSourceFile("lib/nfa.cpp");
   if (!nfaCSourceFile.is_open()) {
       std::cerr << "Error opg file!" << std::endl;
       return; // Exit on failure
   }
-  std::getline(nfaCSourceFile, line);
-  line = "#include \"nfa.h\"";
-  GEN(line, nfaCpp);
   while (std::getline(nfaCSourceFile, line)) { // Read line by line
       GEN(line, nfaCpp); // Use macro to write to output file
       LOG("Line read");
@@ -327,7 +324,7 @@ void CodeGenerator::generateImplicitCode(){
     throw std::ios_base::failure("Failed to open file: " + fileLocation + "nfa.h");
   }
   // h source file
-  std::ifstream nfaHSourceFile("include/nfa.h");
+  std::ifstream nfaHSourceFile("lib/nfa.h");
   if (!nfaHSourceFile.is_open()) {
       std::cerr << "Error opg file!" << std::endl;
       return; // Exit on failure

@@ -330,7 +330,7 @@ Exp_p2* Parser::parseExp_p2(){
   Exp_p1* p1_exp = parseExp_p1();
   Exp_p2* p2_exp = new Exp_p2(p1_exp);
 
-  // TODO: Check if binop exists
+  // TODO: Check if unop exists
 
   return p2_exp;
 }

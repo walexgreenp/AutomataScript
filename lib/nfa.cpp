@@ -29,7 +29,7 @@ bool TransitionState(State &currentState, std::string input,
     if (transition.first.type == Label::EPSILON) {
 
       nextStates.push({currentState.currentIndex, transition.second});
-      if (transition.second->isTerminalNode) {
+      if (transition.second->isTerminalNode && currentState.currentIndex == input.size()) { // LIB
         lengthPQ.push(std::make_pair(currentState.currentIndex,
                                      transition.second->tokenIdentifier));
         reachedTerminal = true;
@@ -38,7 +38,7 @@ bool TransitionState(State &currentState, std::string input,
     // Handle input char is one of the transitions
     else if (transition.first.value == input[currentState.currentIndex]) {
       nextStates.push({currentState.currentIndex + 1, transition.second});
-      if (transition.second->isTerminalNode) {
+      if (transition.second->isTerminalNode && (currentState.currentIndex + 1) == input.size()) { // LIB
         lengthPQ.push(std::make_pair(currentState.currentIndex + 1,
                                      transition.second->tokenIdentifier));
         reachedTerminal = true;
@@ -76,7 +76,7 @@ int RunNFA(Node *startNode, int startIndex, std::string input) {
     nextStates.pop();
   }
 
-  if (lengthPQ.empty()) {
+  if (lengthPQ.empty() || lengthPQ.top().first != input.size()) { // LIB
     return -1;
   }
   return lengthPQ.top().first - startIndex;

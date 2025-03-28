@@ -199,13 +199,13 @@ void CodeGenerator::generateAssignCode(AssignData* assignData){
   instruction += " = ";
 
   Exp* rhs = assignData->rhs;
-  std::string rhs_code = generateRhsCode(rhs);
+  std::string rhs_code = generateRhsCode(rhs); // Generate exp
 
   instruction += rhs_code;
 
-  instruction += ",\"";
-  instruction += lhs;
-  instruction += "\");";
+  // instruction += ",\"";
+  // instruction += lhs;
+  // instruction += "\");";
 
   GEN(instruction, mainOutput);
 
@@ -266,19 +266,15 @@ void CodeGenerator::generateImplicitCode(){
   if (!regexCpp.is_open()) {
     throw std::ios_base::failure("Failed to open file: " + fileLocation + "regex.cpp");
   }
-  std::ifstream cSourceFile("src/regex.cpp");
+  std::ifstream cSourceFile("lib/regex.cpp");
   if (!cSourceFile.is_open()) {
       std::cerr << "Error opg file!" << std::endl;
       return; // Exit on failure
   }
   std::string line;
   // Replace include path (firstline)
-  std::getline(cSourceFile, line);
-  line = "#include \"regex.h\"";
-  GEN(line, regexCpp);
   while (std::getline(cSourceFile, line)) { // Read line by line
       GEN(line, regexCpp); // Use macro to write to output file
-      LOG("Line read");
   }
   cSourceFile.close();
 
@@ -289,14 +285,13 @@ void CodeGenerator::generateImplicitCode(){
     throw std::ios_base::failure("Failed to open file: " + fileLocation + "regex.h");
   }
   // h source file
-  std::ifstream hSourceFile("include/regex.h");
+  std::ifstream hSourceFile("lib/regex.h");
   if (!hSourceFile.is_open()) {
       std::cerr << "Error opg file!" << std::endl;
       return; // Exit on failure
   }
   while (std::getline(hSourceFile, line)) { // Read line by line
       GEN(line, regexH); // Use macro to write to output file
-      LOG("Line read");
   }
   hSourceFile.close();
  
@@ -313,7 +308,6 @@ void CodeGenerator::generateImplicitCode(){
   }
   while (std::getline(nfaCSourceFile, line)) { // Read line by line
       GEN(line, nfaCpp); // Use macro to write to output file
-      LOG("Line read");
   }
   nfaCSourceFile.close();
 
@@ -331,7 +325,6 @@ void CodeGenerator::generateImplicitCode(){
   }
   while (std::getline(nfaHSourceFile, line)) { // Read line by line
       GEN(line, nfaH); // Use macro to write to output file
-      LOG("Line read");
   }
   nfaHSourceFile.close();
 }
@@ -345,9 +338,7 @@ std::string CodeGenerator::generateRhsCode(Exp* rhs){
   std::string exp_p2_code = generateExpP2Code(exp_p2);
   rhs_out += exp_p2_code;
 
-
-
-  // TODO: CodeGen for binop_exp_p2s
+  // TODO: CodeGen for (binop exp_p2)*
   
   return rhs_out;
 }
@@ -357,11 +348,40 @@ std::string CodeGenerator::generateRhsCode(Exp* rhs){
 // WARN: Incomplete
 std::string CodeGenerator::generateExpP2Code(Exp_p2* exp_p2){
   std::string instruction = "";
-  Exp_p1* exp_p1 = exp_p2->exp_p1;
 
-  instruction += generateExpP1Code(exp_p1);
-  
-  // TODO: CodeGen for binop_p1
+  // If there is no unop, this is simply the p1 expression
+  if(exp_p2->unop_type == Exp_p2::Type::None){
+    Exp_p1* exp_p1 = exp_p2->exp_p1;
+    instruction += generateExpP1Code(exp_p1);
+    instruction += ",\"";
+    instruction += "tmp";
+    instruction += "\");";
+  }
+
+  // Unop, wrap p1 expression
+  else{
+    switch(exp_p2->unop_type){
+      case Exp_p2::Type::KleeneStar:
+        instruction += "KleeneStarNFA(";
+        break;
+      case Exp_p2::Type::PosClos:
+        instruction += "PlusNFA(";
+        break;
+      case Exp_p2::Type::Opt:
+        instruction += "OptionalNFA(";
+        break;
+      default:
+        return "ERROR";
+    }
+
+    Exp_p1* exp_p1 = exp_p2->exp_p1;
+    instruction += generateExpP1Code(exp_p1);
+    instruction += ",\"";
+    instruction += "tmp";
+    instruction += "\"";
+    instruction += ")";
+    instruction += ");";
+  }
 
   return instruction;
 }

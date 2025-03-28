@@ -10,7 +10,7 @@ print ::= `PRINT` `:`  Id()* `;`
 test   ::= `TEST` `:` lval `<<` `"` id `"` `;`
 
 ## Define binary expression precedence from highest to lowest
-   exp       ::= exp_p2 (binop_p2 exp_p2)*
+   exp       ::= exp_p2 (binop exp_p2)*
 exp_p2       ::= exp_p1 unop?
 exp_p1       ::= `(` exp `)`
                | exp_ac

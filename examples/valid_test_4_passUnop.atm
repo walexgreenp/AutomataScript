@@ -1,0 +1,28 @@
+PRINT: Basic unop call testing;
+
+// KleeneStar
+PRINT:;
+PRINT: Testing KleeneStar;
+PRINT: Accept Accept Reject;
+A = "abc"*;
+TEST: A << "abc"; // Accept
+TEST: A << "abcabc"; // Accept
+TEST: A << "abab"; // Reject
+
+// Pos. Closure
+PRINT:;
+PRINT: Testing Pos Closure;
+PRINT: Accept Accept Reject;
+B = "abc"+;
+TEST: B << "abc"; // Accept
+TEST: B << "abcabc"; // Accept
+TEST: B << "abab"; // Accept
+
+// Optional
+PRINT:;
+PRINT: Testing Optional;
+PRINT: Accept Reject Reject;
+C = "abc"?;
+TEST: C << "abc"; // Accept
+TEST: C << "ab"; // Reject
+TEST: C << "abcabc"; // Reject

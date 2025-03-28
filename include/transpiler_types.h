@@ -29,10 +29,13 @@ struct Exp{
 
 struct Exp_p2{
   Exp_p1* exp_p1;
-  std::string binop_p1; // OPTIONAL
+  enum class Type {None, KleeneStar, PosClos, Opt} unop_type;
   
-  Exp_p2(Exp_p1* p1_exp) : exp_p1(p1_exp) {};
-  Exp_p2(Exp_p1* p1_exp, std::string p1_binop) : exp_p1(p1_exp), binop_p1(p1_binop) {};
+  // "Default" constructor
+  Exp_p2(Exp_p1* p1_exp) : exp_p1(p1_exp), unop_type(Type::None){};
+
+  // Optional unop type is defined
+  Exp_p2(Exp_p1* p1_exp, Type type_unop) : exp_p1(p1_exp), unop_type(type_unop) {};
 };
 
 struct Exp_p1{

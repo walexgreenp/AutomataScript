@@ -224,13 +224,12 @@ Instruction Parser::parseTest() {
   // Parsing Id()
   std::string test_value = "";
   currToken = tokens[parsing_index];
-  if (currToken.substr(0, 3) != "Id(") {
-    return generateErrorInstruction(parsing_index);
-  }
-  test_value += currToken.substr(3, currToken.length() - 4);
-  err_val = consumeToken();
-  if (err_val != NO_ERR) {
-    return generateErrorInstruction(err_val);
+  if (currToken.substr(0, 3) == "Id(") {
+    test_value += currToken.substr(3, currToken.length() - 4);
+    err_val = consumeToken();
+    if (err_val != NO_ERR) {
+      return generateErrorInstruction(err_val);
+    }
   }
 
   // Parsing "
@@ -326,12 +325,52 @@ Exp* Parser::parseRhs() {
 // WARN: Incomplete!
 // Need to add binop check
 Exp_p2* Parser::parseExp_p2(){
+  int err;
 
+
+  // std::string token = tokens[parsing_index];
+  // LOG("Before:");
+  // LOG(token);
+
+  // Get p1 expression
   Exp_p1* p1_exp = parseExp_p1();
+
+  // Check if the unop exists (optional)
+  std::string token = tokens[parsing_index];
+  if(token == "Star"){
+    // This exists!, so consume the token
+    err = consumeToken();
+    if(err != NO_ERR){
+      // TODO: Improve error handling
+      return nullptr;
+    }
+    // KleeneStar
+    Exp_p2* p2_exp = new Exp_p2(p1_exp, Exp_p2::Type::KleeneStar);
+    return p2_exp;
+  }
+  else if(token == "Plus"){
+    // Positional Closure
+    err = consumeToken();
+    if(err != NO_ERR){
+      // TODO: Improve error handling
+      return nullptr;
+    }
+    Exp_p2* p2_exp = new Exp_p2(p1_exp, Exp_p2::Type::PosClos);
+    return p2_exp;
+  }
+  else if(token == "Question"){
+    // Optional
+    err = consumeToken();
+    if(err != NO_ERR){
+      // TODO: Improve error handling
+      return nullptr;
+    }
+    Exp_p2* p2_exp = new Exp_p2(p1_exp, Exp_p2::Type::Opt);
+    return p2_exp;
+  }
+
+  // If it doesn't exist, return with type None
   Exp_p2* p2_exp = new Exp_p2(p1_exp);
-
-  // TODO: Check if binop exists
-
   return p2_exp;
 }
 

@@ -9,3 +9,6 @@ TEST: Pass << "passing";
 // Failing test ("failing" not  "fail")
 Fail = "failing";
 TEST: Fail << "fail";
+
+// Ensure that fails for duplicate basic literal
+TEST: Pass << "passingpassing";

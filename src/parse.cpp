@@ -224,13 +224,12 @@ Instruction Parser::parseTest() {
   // Parsing Id()
   std::string test_value = "";
   currToken = tokens[parsing_index];
-  if (currToken.substr(0, 3) != "Id(") {
-    return generateErrorInstruction(parsing_index);
-  }
-  test_value += currToken.substr(3, currToken.length() - 4);
-  err_val = consumeToken();
-  if (err_val != NO_ERR) {
-    return generateErrorInstruction(err_val);
+  if (currToken.substr(0, 3) == "Id(") {
+    test_value += currToken.substr(3, currToken.length() - 4);
+    err_val = consumeToken();
+    if (err_val != NO_ERR) {
+      return generateErrorInstruction(err_val);
+    }
   }
 
   // Parsing "

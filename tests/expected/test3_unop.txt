@@ -4,19 +4,22 @@
 - Basic unop call testing 
 - 
 - Testing KleeneStar 
-- Accept Accept Reject 
+- Expecting A A A R 
+- A <- : Accepted by NFA.
 - A <- abc: Accepted by NFA.
 - A <- abcabc: Accepted by NFA.
 - A <- abab: Rejected by NFA.
 - 
 - Testing Pos Closure 
-- Accept Accept Reject 
+- Expecting R A A R 
+- B <- : Rejected by NFA.
 - B <- abc: Accepted by NFA.
 - B <- abcabc: Accepted by NFA.
 - B <- abab: Rejected by NFA.
 - 
 - Testing Optional 
-- Accept Reject Reject 
+- Expecting A A R R 
+- C <- : Accepted by NFA.
 - C <- abc: Accepted by NFA.
 - C <- ab: Rejected by NFA.
 - C <- abcabc: Rejected by NFA.

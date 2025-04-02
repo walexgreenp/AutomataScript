@@ -3,8 +3,9 @@ PRINT: Basic unop call testing;
 // KleeneStar
 PRINT:;
 PRINT: Testing KleeneStar;
-PRINT: Accept Accept Reject;
+PRINT: Expecting A A A R;
 A = "abc"*;
+TEST: A << ""; // Accept
 TEST: A << "abc"; // Accept
 TEST: A << "abcabc"; // Accept
 TEST: A << "abab"; // Reject
@@ -12,17 +13,19 @@ TEST: A << "abab"; // Reject
 // Pos. Closure
 PRINT:;
 PRINT: Testing Pos Closure;
-PRINT: Accept Accept Reject;
+PRINT: Expecting R A A R;
 B = "abc"+;
+TEST: B << ""; // Reject
 TEST: B << "abc"; // Accept
 TEST: B << "abcabc"; // Accept
-TEST: B << "abab"; // Accept
+TEST: B << "abab"; // Reject
 
 // Optional
 PRINT:;
 PRINT: Testing Optional;
-PRINT: Accept Reject Reject;
+PRINT: Expecting A A R R;
 C = "abc"?;
+TEST: C << ""; // Accept
 TEST: C << "abc"; // Accept
 TEST: C << "ab"; // Reject
 TEST: C << "abcabc"; // Reject

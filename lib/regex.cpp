@@ -1,8 +1,5 @@
 #include "regex.h"
 
-// nfas.push_back(
-//     ConcatNFA(BracketNFA(alphabet, "Id"),
-//               KleeneStarNFA(BracketNFA(alphanumeric, "Id")))); // Id
 std::pair<Node *, Node *> LiteralNFA(std::string acceptable_chars,
                                      std::string identifyingSymbol) {
 
@@ -31,10 +28,27 @@ std::pair<Node *, Node *> LiteralNFA(std::string acceptable_chars,
 }
 
 std::pair<Node *, Node *> KleeneStarNFA(std::pair<Node *, Node *> nfa) {
-  Label label = Label();
-  label.type = Label::EPSILON;
-  nfa.second->transitions.push_back({label, nfa.first});
-  return nfa;
+  // Create new initial nodes for empty string
+  Node *new_start = new Node();
+  Node *new_accept = new Node();
+  new_start->tokenIdentifier = nfa.first->tokenIdentifier;
+  new_accept->tokenIdentifier = nfa.second->tokenIdentifier;
+  new_accept->isTerminalNode = true;
+  Label epsilon;
+  epsilon.type = Label::EPSILON;
+
+  // Empty string accept
+  new_start->transitions.push_back({epsilon, new_accept});
+
+  // Inputted NFA
+  new_start->transitions.push_back({epsilon, nfa.first});
+
+  // Add epsilon back to start for repetition
+  nfa.second->isTerminalNode = false; // Old accept not terminal for safety
+  nfa.second->transitions.push_back({epsilon, nfa.first});
+  nfa.second->transitions.push_back({epsilon, new_accept});
+
+  return {new_start, new_accept};
 }
 
 std::pair<Node *, Node *> BracketNFA(std::vector<char> accepting_chars,

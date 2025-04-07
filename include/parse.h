@@ -7,6 +7,11 @@
 #include "../include/transpiler_types.h"
 #include "../include/logger.h"
 
+// -----------------------------------------------------------------------------
+// Parser Class
+// -----------------------------------------------------------------------------
+// The Parser class is responsible for parsing the entire token stream. It
+// should return an AST after parsing on success.
 class Parser{
 public:
   // Parser constructor

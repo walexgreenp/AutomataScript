@@ -1,14 +1,24 @@
+#include "../include/codegen.h"
+#include "../include/logger.h"
+#include "../include/parse.h"
+#include "../include/tokenize.h"
+#include "../include/transpiler_types.h"
+#include "../include/validate.h"
 #include <fstream>
 #include <iostream>
 #include <vector>
-#include "../include/tokenize.h"
-#include "../include/parse.h"
-#include "../include/codegen.h"
-#include "../include/validate.h"
-#include "../include/transpiler_types.h"
-#include "../include/logger.h"
 
-
+/**
+ * @brief Main entry point for the transpiler.
+ *
+ * This program reads a source file, tokenizes its content, parses the tokens
+ * into an AST, validates the instructions, and then generates and compiles C++
+ * code.
+ *
+ * @param argc The number of command-line arguments.
+ * @param argv Array of command-line arguments.
+ * @return int Exit status of the program.
+ */
 int main(int argc, char *argv[]) {
   if (argc != 2) {
     std::cerr << "Usage: " << argv[0] << " <source_file>\n";
@@ -27,7 +37,7 @@ int main(int argc, char *argv[]) {
 
   // Tokenize everything. This should return a vector with all the tokens
   std::vector<std::string> tokens = mainTokenizer(input);
-  if(tokens[0].substr(0, 4) == "ERRO"){
+  if (tokens[0].substr(0, 4) == "ERRO") {
     // TODO: Add better error prints
     std::cout << tokens[0] << std::endl;
     return 1;
@@ -37,20 +47,22 @@ int main(int argc, char *argv[]) {
   // Take the tokens, turn into AST.
   Parser parser(tokens);
   std::vector<Instruction> all_instructions = parser.mainParser();
-  if(all_instructions[0].inst_type == Instruction::Type::Error){
-    std::cout << "Parsing error at index " << ((ErrorData*)all_instructions[0].data)->error_index << std::endl;
+  if (all_instructions[0].inst_type == Instruction::Type::Error) {
+    std::cout << "Parsing error at index "
+              << ((ErrorData *)all_instructions[0].data)->error_index
+              << std::endl;
     return 1;
   }
 
   // Validation phase
-  // If parsing is successful, there may be places that are invalid, e.g. attempting to access an unused variable, etc.
+  // If parsing is successful, there may be places that are invalid, e.g.
+  // attempting to access an unused variable, etc.
   Validator validator(all_instructions);
   int validate_status = validator.validate();
-  if(validate_status == -1){
+  if (validate_status == -1) {
     std::cout << "Validation error" << std::endl;
     return 1;
   }
-
 
   // Generate the C++ code, store it in file location
   CodeGenerator codegen("bin/tmp/", all_instructions);

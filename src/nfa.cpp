@@ -1,24 +1,28 @@
 #include "../include/nfa.h"
 
-/* Declaring extern locally */
+/**
+ * @brief Declares a locally scoped priority queue to store pairs of integers
+ * and strings.
+ *
+ * The priority queue uses a custom comparator (ComparePair) to order the pairs.
+ */
 std::priority_queue<std::pair<int, std::string>,
                     std::vector<std::pair<int, std::string>>, ComparePair>
     lengthPQ;
 
-/*
- * Function: TransitionState
+/**
+ * TransitionState
  *
- *  Add any of the next states of the currentState to the nextStates queue
- *  For character transition make sure to increment index, for epsilon
- *  transition make sure not to increment index Return true if reaches terminal
- *  node and input is exhausted
+ * @brief Adds any of the next states of the current state to the nextStates
+ * queue. For a character transition, the index is incremented; for an epsilon
+ * transition, the index remains unchanged. Returns true if a terminal node is
+ * reached while the input is exhausted.
  *
- *  @param currentState Current state of the NFA
- *  @param input Represents the symbol (or epsilon) being processed
- *  @param nextStates Represents a queue that holds all states that haven't been
- * processed
- *
- * @return TRUE if terminal node is found, otherwise FALSE
+ * @param currentState The current state of the NFA.
+ * @param input The input string representing the symbol (or epsilon) being
+ * processed.
+ * @param nextStates A queue that holds all states that haven't been processed.
+ * @return true if a terminal node is found; otherwise, false.
  */
 bool TransitionState(State &currentState, std::string input,
                      std::queue<State> &nextStates) {
@@ -48,16 +52,18 @@ bool TransitionState(State &currentState, std::string input,
   return reachedTerminal;
 }
 
-/*
- * Function: RunNFA
- *  Initialize nextStates queue with starting state
- *  Pop off queue and run TransitionState on dequeued state
- *  Continue until empty queue or TransitionState returns true
+/**
+ * RunNFA
  *
- * @param startNode
- * @param input
+ * @brief Initializes the nextStates queue with the starting state, then
+ * processes each state by calling TransitionState until the queue is empty or a
+ * terminal state is found.
  *
- * @return -1 if terminal not found.
+ * @param startNode The starting node of the NFA.
+ * @param startIndex The starting index in the input string.
+ * @param input The input string to be processed by the NFA.
+ * @return The number of characters processed if a terminal state is found;
+ *         otherwise, returns -1.
  */
 int RunNFA(Node *startNode, int startIndex, std::string input) {
   // empty the PQ

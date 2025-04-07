@@ -2,19 +2,23 @@
 #define LOGGER_H
 
 #include "../include/transpiler_types.h"
-#include <cstdlib>
-#include <iostream>
-#include <fstream>
-#include <string>
 #include <chrono>
-#include <iomanip>
+#include <cstdlib>
 #include <ctime>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
 #include <sstream>
+#include <string>
 
 /* Logger macro */
 #define LOG(msg) logger.log(msg)
 
-
+// -----------------------------------------------------------------------------
+// Logger Class
+// -----------------------------------------------------------------------------
+// The Logger class is responsible for allowing support of logs, so devs
+// can log things to a logfile for easier debugging
 class Logger {
 public:
   Logger(const std::string &filename);

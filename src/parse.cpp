@@ -1,17 +1,20 @@
 #include "../include/parse.h"
 
-/*
- * A program consists of a vector of instructions
- * Instructions can have 3 types: PRINT, TEST, NFAvar
+/**
+ * @brief Global parsing index.
  *
- *
+ * Points to the current token during parsing.
  */
-
-// Global pointer to the current token
 int parsing_index;
 
-/*
- * Constructor for a parser object
+/**
+ * Parser::Parser
+ *
+ * @brief Constructor for the Parser class.
+ *
+ * Initializes the parser with a list of tokens and resets the parsing index.
+ *
+ * @param token_list The vector of tokens to parse.
  */
 Parser::Parser(const std::vector<std::string> &token_list)
     : tokens(token_list) {
@@ -20,11 +23,15 @@ Parser::Parser(const std::vector<std::string> &token_list)
   this->total_tokens = token_list.size();
 }
 
-/*
- * Top Level parser.
+/**
+ * Parser::mainParser
  *
- * Will look for the 3 types, and flow through the proper function
+ * @brief Top-level parser that processes tokens into a vector of instructions.
  *
+ * Scans through the token stream, dispatching to appropriate parsing functions
+ * for Print, Test, and variable instructions.
+ *
+ * @return A vector of Instruction objects.
  */
 std::vector<Instruction> Parser::mainParser() {
   std::vector<Instruction> instructions;
@@ -75,13 +82,15 @@ std::vector<Instruction> Parser::mainParser() {
   return instructions;
 };
 
-/*
- * Function: parsePrint()
+/**
+ * Parser::parsePrint
  *
- * Parse the print and store into Instruction
+ * @brief Parses a Print instruction.
  *
- * print ::= `PRINT` `:`  Id()* `;`
+ * Expected syntax:
+ *   Print : Id()* ;
  *
+ * @return An Instruction object for a Print operation.
  */
 Instruction Parser::parsePrint() {
   std::string currToken;
@@ -128,11 +137,12 @@ Instruction Parser::parsePrint() {
   return inst_out;
 }
 
-/*
- * Function: consumeToken
+/**
+ * Parser::consumeToken
  *
- * Increment the parsing index, ensure it's valid
+ * @brief Advances the parsing index and validates its range.
  *
+ * @return NO_ERR if successful; otherwise, an error value.
  */
 int Parser::consumeToken() {
   parsing_index++;
@@ -143,11 +153,13 @@ int Parser::consumeToken() {
   return NO_ERR;
 }
 
-/*
- * Function: generateErrorIV
+/**
+ * Parser::generateErrorIV
  *
- * Generate the instruction vector formatted to read errors
+ * @brief Generates an instruction vector containing a single error instruction.
  *
+ * @param err_val The error value or index where the error occurred.
+ * @return A vector of Instruction objects containing the error.
  */
 std::vector<Instruction> Parser::generateErrorIV(int err_val) {
   std::vector<Instruction> err_instruction;
@@ -155,11 +167,13 @@ std::vector<Instruction> Parser::generateErrorIV(int err_val) {
   return err_instruction;
 }
 
-/*
- * Function: generateErrorInstruction
+/**
+ * Parser::generateErrorInstruction
  *
- * Return a single instruction that is an error
+ * @brief Generates a single error instruction.
  *
+ * @param err_val The error value or index.
+ * @return An Instruction object representing an error.
  */
 Instruction Parser::generateErrorInstruction(int err_val) {
   ErrorData *err_data = new ErrorData(ErrorData::Type::ParsingError, err_val);
@@ -168,13 +182,15 @@ Instruction Parser::generateErrorInstruction(int err_val) {
   return err_inst;
 }
 
-/*
- * Function: parseTest()
+/**
+ * Parser::parseTest
  *
- * Parse the print and store into Instruction
+ * @brief Parses a Test instruction.
  *
- * print ::= `PRINT` `:`  Id()* `;`
+ * Expected syntax:
+ *   Test : Id("...") Runner Quotation Id("...") Quotation Semicolon
  *
+ * @return An Instruction object for a Test operation.
  */
 Instruction Parser::parseTest() {
   std::string currToken;
@@ -259,6 +275,16 @@ Instruction Parser::parseTest() {
   return inst_out;
 }
 
+/**
+ * Parser::parseVar
+ *
+ * @brief Parses a variable assignment instruction.
+ *
+ * Expected syntax:
+ *   Id() Assign <expression> ;
+ *
+ * @return An Instruction object for an assignment operation.
+ */
 Instruction Parser::parseVar() {
   int err_val;
   std::string currToken;
@@ -297,104 +323,122 @@ Instruction Parser::parseVar() {
 
   return inst_out;
 }
-
-// WARN: Incomplete!
-// Currently supports small subset of instructions
-// Supported:
-//  - Basic -> A = "abc";
-Exp* Parser::parseRhs() {
+/**
+ * Parser::parseRhs
+ *
+ * @brief Parses the right-hand side (RHS) of an assignment.
+ *
+ * Begins by parsing an Exp_p2 expression and then checks for additional binary
+ * operations.
+ *
+ * @return A pointer to an Exp representing the parsed expression.
+ * @warn WARN: Incomplete!
+ * @todo TODO: Loop to handle additional binary operations.
+ */
+Exp *Parser::parseRhs() {
   // Start by getting exp_p2
   std::string currToken;
-  Exp_p2* p2_exp = parseExp_p2();
+  Exp_p2 *p2_exp = parseExp_p2();
   Exp *expression = new Exp(p2_exp);
 
   // TODO: Loop to see if there are any further expressions for binop_exp_p2s
 
   currToken = tokens[parsing_index];
-  if(currToken != "Semicolon"){
+  if (currToken != "Semicolon") {
     // TODO: Better return
     return nullptr;
   }
   int err_val = consumeToken();
-  if(err_val != NO_ERR){
+  if (err_val != NO_ERR) {
     return nullptr;
   }
   return expression;
 }
 
-// WARN: Incomplete!
-// Need to add binop check
-Exp_p2* Parser::parseExp_p2(){
+/**
+ * Parser::parseExp_p2
+ *
+ * @brief Parses an Exp_p2 expression.
+ *
+ * First, parses an Exp_p1 expression and then checks for an optional unary
+ * operator.
+ *
+ * @return A pointer to an Exp_p2 representing the parsed expression.
+ * @warn WARN: Incomplete!
+ * @todo TODO: Add binary operator checking.
+ */
+Exp_p2 *Parser::parseExp_p2() {
   int err;
 
-
-  // std::string token = tokens[parsing_index];
-  // LOG("Before:");
-  // LOG(token);
-
   // Get p1 expression
-  Exp_p1* p1_exp = parseExp_p1();
+  Exp_p1 *p1_exp = parseExp_p1();
 
   // Check if the unop exists (optional)
   std::string token = tokens[parsing_index];
-  if(token == "Star"){
+  if (token == "Star") {
     // This exists!, so consume the token
     err = consumeToken();
-    if(err != NO_ERR){
+    if (err != NO_ERR) {
       // TODO: Improve error handling
       return nullptr;
     }
     // KleeneStar
-    Exp_p2* p2_exp = new Exp_p2(p1_exp, Exp_p2::Type::KleeneStar);
+    Exp_p2 *p2_exp = new Exp_p2(p1_exp, Exp_p2::Type::KleeneStar);
     return p2_exp;
-  }
-  else if(token == "Plus"){
+  } else if (token == "Plus") {
     // Positional Closure
     err = consumeToken();
-    if(err != NO_ERR){
+    if (err != NO_ERR) {
       // TODO: Improve error handling
       return nullptr;
     }
-    Exp_p2* p2_exp = new Exp_p2(p1_exp, Exp_p2::Type::PosClos);
+    Exp_p2 *p2_exp = new Exp_p2(p1_exp, Exp_p2::Type::PosClos);
     return p2_exp;
-  }
-  else if(token == "Question"){
+  } else if (token == "Question") {
     // Optional
     err = consumeToken();
-    if(err != NO_ERR){
+    if (err != NO_ERR) {
       // TODO: Improve error handling
       return nullptr;
     }
-    Exp_p2* p2_exp = new Exp_p2(p1_exp, Exp_p2::Type::Opt);
+    Exp_p2 *p2_exp = new Exp_p2(p1_exp, Exp_p2::Type::Opt);
     return p2_exp;
   }
 
   // If it doesn't exist, return with type None
-  Exp_p2* p2_exp = new Exp_p2(p1_exp);
+  Exp_p2 *p2_exp = new Exp_p2(p1_exp);
   return p2_exp;
 }
 
-// WARN: Incomplete!
-// Small subset supported
-// Supported:
-//  - exp_ac
-Exp_p1* Parser::parseExp_p1(){
+/**
+ * Parser::parseExp_p1
+ *
+ * @brief Parses an Exp_p1 expression.
+ *
+ * Currently supports only a subset:
+ *   - Literal expressions enclosed in Quotation marks.
+ *
+ * @return A pointer to an Exp_p1 representing the parsed expression.
+ * @warn WARN: Incomplete!
+ * @todo TODO: Add support for ( exp ), lval, and other cases.
+ */
+Exp_p1 *Parser::parseExp_p1() {
   // Idea: Check next token. Match to any possible case.
   // If no case matches, there is an error here.
   // TODO: ( exp )
-  Exp_p1* p1_exp = new Exp_p1();
+  Exp_p1 *p1_exp = new Exp_p1();
   std::string currToken = tokens[parsing_index];
   int err_val;
 
   // exp_ac (Id())
-  if(currToken == "Quotation"){
+  if (currToken == "Quotation") {
     // Only path that can exist for Quotation
     err_val = consumeToken();
-    if(err_val != NO_ERR){
+    if (err_val != NO_ERR) {
       // TODO: Add better return types than just nullptr
       return nullptr;
     }
-    
+
     // Parsing Id
     std::string literal = "";
     currToken = tokens[parsing_index];
@@ -411,27 +455,22 @@ Exp_p1* Parser::parseExp_p1(){
 
     // Parsing closing quote
     currToken = tokens[parsing_index];
-    if(currToken != "Quotation"){
+    if (currToken != "Quotation") {
       // TODO: Better return
       return nullptr;
     }
     err_val = consumeToken();
-    if (err_val != NO_ERR){
+    if (err_val != NO_ERR) {
       // TODO: Better return
       return nullptr;
     }
 
     p1_exp->exp_p1_type = Exp_p1::Type::Exp_ac;
     p1_exp->identifier = literal;
-  }
-  else{
+  } else {
     // TODO: add other cases here (e.g. ( exp ), lval, etc)
     return nullptr;
   }
 
   return p1_exp;
 }
-
-
-
-

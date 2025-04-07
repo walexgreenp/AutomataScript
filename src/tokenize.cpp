@@ -1,12 +1,21 @@
-#include "../include/nfa.h"
 #include "../include/tokenize.h"
+#include "../include/nfa.h"
 #include "../include/regex.h"
-#include <fstream>
 #include <iostream>
 #include <vector>
 
 typedef std::vector<std::pair<Node *, Node *>> nfa_list;
 
+/**
+ * removeComments
+ * @brief Removes both line and block comments from the given input string.
+ *
+ * Scans the input string character by character, detecting and skipping
+ * comments.
+ *
+ * @param input The input string from which comments should be removed.
+ * @return A string with comments removed.
+ */
 std::string removeComments(std::string input) {
   std::string result;
   bool inLineComment = false;
@@ -43,6 +52,17 @@ std::string removeComments(std::string input) {
   return result;
 }
 
+/**
+ * mainTokenizer
+ * @brief Tokenizes the given input string by first removing comments and then
+ * applying NFAs.
+ *
+ * Initializes NFAs for tokenizing, iterates through the input, and collects
+ * tokens.
+ *
+ * @param input The raw input string to be tokenized.
+ * @return A vector of token strings.
+ */
 std::vector<std::string> mainTokenizer(std::string input) {
   std::vector<std::string> tokens;
 
@@ -60,7 +80,7 @@ std::vector<std::string> mainTokenizer(std::string input) {
     if (tokenLength > 0) {
       std::string token = input.substr(startIndex, tokenLength);
       std::string out = outputToken(token);
-      if(out != "IGNORE"){
+      if (out != "IGNORE") {
         // Don't add IGNORE tokens
         tokens.push_back(out);
       }
@@ -78,6 +98,17 @@ std::vector<std::string> mainTokenizer(std::string input) {
   return tokens;
 }
 
+/**
+ * outputToken
+ * @brief Determines the token type from the lexeme and returns the formatted
+ * token string.
+ *
+ * Uses the top value from a priority queue (lengthPQ) to decide the token type,
+ * then formats and returns the token accordingly.
+ *
+ * @param lexeme The lexeme string to be processed.
+ * @return The formatted token string.
+ */
 std::string outputToken(const std::string &lexeme) {
   // This function should determine the type of token based on the start node
   // and lexeme Here you would map the node to a token type and print it
@@ -104,12 +135,12 @@ std::string outputToken(const std::string &lexeme) {
       outputToken += ")";
     } else if (firstVal.second == "IGNORE") {
       return "IGNORE";
-    } else if(firstVal.second == "String" || lengthPQ.top().second == "String"){
+    } else if (firstVal.second == "String" ||
+               lengthPQ.top().second == "String") {
       outputToken += "String(";
       outputToken += lexeme;
       outputToken += ")";
-    }
-    else {
+    } else {
       outputToken += firstVal.second;
     }
   }
@@ -117,6 +148,15 @@ std::string outputToken(const std::string &lexeme) {
   return outputToken;
 }
 
+/**
+ * initNFA
+ * @brief Initializes the composite NFA used for tokenization.
+ *
+ * Constructs NFAs for numbers, identifiers, strings, literals, and whitespaces,
+ * then combines them using Thompson's construction.
+ *
+ * @return A pointer to the start node of the combined NFA.
+ */
 Node *initNFA() {
   std::vector<std::pair<Node *, Node *>> nfas;
   std::vector<char> alphabet;
@@ -136,8 +176,8 @@ Node *initNFA() {
   // std::vector<char> total_alphabet = alphanumeric;
   std::vector<char> whitespaces = {' ', '\t', '\n', '\r'};
   std::vector<char> literals = {'&', ':', ';', ',', '_', '-', '+', '-',
-                           '*', '/', '<', '<', '>', '>', '.', '=',
-                           '(', ')', '[', ']', '{', '}', '!', '^'};
+                                '*', '/', '<', '<', '>', '>', '.', '=',
+                                '(', ')', '[', ']', '{', '}', '!', '^'};
   nfas.push_back(PlusNFA(numbers, "Num")); // Num
 
   nfas.push_back(
@@ -146,17 +186,12 @@ Node *initNFA() {
 
   // Make NFA for strings
   // '"' (whitespace* alphanumeric*)* '"'
-  nfas.push_back(
-    ConcatNFA(
+  nfas.push_back(ConcatNFA(
       LiteralNFA("\"", "String"),
-      ConcatNFA(
-        ConcatNFA(BracketNFA(alphabet, "String"),
-                KleeneStarNFA(BracketNFA(alphanumeric, "String"))),
-        LiteralNFA("\"", "String")
-      )
-    )
-  ); 
-  
+      ConcatNFA(ConcatNFA(BracketNFA(alphabet, "String"),
+                          KleeneStarNFA(BracketNFA(alphanumeric, "String"))),
+                LiteralNFA("\"", "String"))));
+
   // Construct literals with their identifiers (Including whitespaces)
   makeLiteralNFAs(nfas);
 
@@ -170,12 +205,23 @@ Node *initNFA() {
     }
     all_alphabet_no_backslash.push_back(static_cast<char>(i));
   }
-  std:: vector<char> all_alphabet = all_alphabet_no_backslash;
+  std::vector<char> all_alphabet = all_alphabet_no_backslash;
   all_alphabet.push_back('\n');
 
   return ThompsonNFA(nfas);
 }
 
+/**
+ * makeLiteralNFAs
+ * @brief Adds literal NFAs to the provided list of NFAs.
+ *
+ * Constructs NFAs for various literal symbols such as quotation marks,
+ * semicolons, assignment operators, and others, then appends them to the given
+ * vector.
+ *
+ * @param nfas A reference to a vector of NFAs (each represented as a pair of
+ * nodes).
+ */
 void makeLiteralNFAs(std::vector<std::pair<Node *, Node *>> &nfas) {
   nfas.push_back(LiteralNFA("\"", "Quotation"));
   nfas.push_back(LiteralNFA(";", "Semicolon"));

@@ -430,8 +430,18 @@ Exp_p1 *Parser::parseExp_p1() {
   std::string currToken = tokens[parsing_index];
   int err_val;
 
-  // exp_ac (Id())
-  if (currToken == "Quotation") {
+  // ( exp ) OR ( exp_ac - exp_ac )
+  if(currToken == "OpenParen"){
+    err_val = consumeToken();
+    if (err_val != NO_ERR) {
+      // TODO: Add better return types than just nullptr
+      return nullptr;
+    }
+
+    // TODO: New stuff here
+  }
+  // exp_ac
+  else if (currToken == "Quotation") {
     // Only path that can exist for Quotation
     err_val = consumeToken();
     if (err_val != NO_ERR) {
@@ -467,8 +477,15 @@ Exp_p1 *Parser::parseExp_p1() {
 
     p1_exp->exp_p1_type = Exp_p1::Type::Exp_ac;
     p1_exp->identifier = literal;
+  } else if(currToken.substr(0,3) == "Id("){
+    err_val = consumeToken();
+    if (err_val != NO_ERR) {
+      // TODO: Add better return types than just nullptr
+      return nullptr;
+    }
+    // TODO: New stuff here
   } else {
-    // TODO: add other cases here (e.g. ( exp ), lval, etc)
+    // User error, should not be here.
     return nullptr;
   }
 
